@@ -17,7 +17,7 @@ const JWT_SECRET_KEY = 'my_secret_key'
 
 app.all("/*", function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS,DELETE,PUT");
     res.header("Access-Control-Allow-Origin", "*"); 
     return next();
 });
@@ -127,6 +127,17 @@ app.delete('/employees/:id',(req,res) => {
     var query = {_id: new ObjectId(req.params.id)};
     console.log(query)
     dbo.collection("employees").deleteOne(query, function(err, result) {
+        if (err) throw err;
+        res.json(result);
+        dbo.close;
+      });
+});
+//update employee
+app.put('/employees/:id',(req,res) => {
+    var query = {_id: new ObjectId(req.params.id)};
+    console.log(query)
+    const newValues = { $set: {...req.body}}
+    dbo.collection("employees").updateOne(query,newValues, function(err, result) {
         if (err) throw err;
         res.json(result);
         dbo.close;
